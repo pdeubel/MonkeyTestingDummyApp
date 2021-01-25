@@ -13,6 +13,7 @@ from src.util.MatrixUtils import MatrixUtils
 class Application2(GymEnvironment):
 
     def __init__(self):
+        self.__all_buttons = []
         window = self.__init_components()
         self.__windows = [window]
         self.__current_matrix = window.current_matrix
@@ -20,7 +21,6 @@ class Application2(GymEnvironment):
         self.__height = window.height
         self.__re_stack = False
         self.__done = False
-        self.__active_index = -1
 
     def __init_components(self) -> Window:
         # Load images
@@ -28,7 +28,7 @@ class Application2(GymEnvironment):
         main_window_array = MatrixUtils.get_numpy_array_of_image('resources/drawables/main_window.png')
 
         close_button_large_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/close_window_button_big_unclicked.png')
+            'resources/drawables/close_window_button_large_unclicked.png')
 
         uber_window_array = MatrixUtils.get_numpy_array_of_image('resources/drawables/window_über.png')
 
@@ -91,9 +91,10 @@ class Application2(GymEnvironment):
             self.remove_window()
             self.add_window(preferences_window)
 
+        """
         def hide_button(btn: Button):
-            pass
-            # self.change_visibility(button2, not button2.visible)
+            self.change_visibility(btn, not btn.visible)
+        """
 
         def close_window(btn: Button):
             self.remove_window()
@@ -105,91 +106,102 @@ class Application2(GymEnvironment):
 
         # Initialize components
         # --------------------------------------------------------------------------------------------------
-        close_button = Button(close_button_array, np.array([80, 1]), reward=2, on_click_listener=close_window)
-        close_uber_button = Button(close_uber_window_button_array, np.array([1, 86]), reward=2,
-                                   on_click_listener=close_window)
-        uber_window = Window(uber_window_array, [close_uber_button, close_button], np.array([273, 123]))
-
         next_pos = 0
         main_window_children = []
 
         app_close_button = Button(close_button_large_array, np.array([380, 0]), reward=2, on_click_listener=close_application)
+        self.__all_buttons.append(app_close_button)
         main_window_children.append(app_close_button)
 
         dropdown_button_datei_children = []
         for i in range(0, 10):
-            dropdown_button_datei_children.append(
-                MenuButton(menu_button_other_unclicked_array, menu_button_other_clicked_array,
-                           reward=2))
+            button = MenuButton(menu_button_other_unclicked_array, menu_button_other_clicked_array, reward=2)
+            dropdown_button_datei_children.append(button)
+            self.__all_buttons.append(button)
 
         preferences_button = MenuButton(menu_button_preferences_unclicked_array,
                                         reward=2,
                                         on_click_listener=open_preferences)
         dropdown_button_datei_children.append(preferences_button)
+        self.__all_buttons.append(preferences_button)
 
         dropdown_button_datei = DropdownButton(dropdown_datei_unclicked_array, np.array([next_pos, 12]),
                                                dropdown_button_datei_children, self,
                                                dropdown_datei_clicked_array, reward=2)
+        self.__all_buttons.append(dropdown_button_datei)
 
         next_pos += dropdown_button_datei.width
         main_window_children.append(dropdown_button_datei)
 
         dropdown_button_anzeigen_children = []
         for i in range(0, 3):
-            dropdown_button_anzeigen_children.append(
-                MenuButton(menu_button_other_unclicked_array, menu_button_other_clicked_array,
-                           reward=2))
+            button = MenuButton(menu_button_other_unclicked_array, menu_button_other_clicked_array, reward=2)
+            dropdown_button_anzeigen_children.append(button)
+            self.__all_buttons.append(button)
 
         dropdown_button_anzeigen = DropdownButton(dropdown_anzeigen_unclicked_array,
                                                   np.array([next_pos, 12]),
                                                   dropdown_button_anzeigen_children, self,
                                                   dropdown_anzeigen_clicked_array, reward=2)
+        self.__all_buttons.append(dropdown_button_anzeigen)
 
         next_pos += dropdown_button_anzeigen.width
         main_window_children.append(dropdown_button_anzeigen)
 
         dropdown_button_navigation_children = []
         for i in range(0, 4):
-            dropdown_button_navigation_children.append(
-                MenuButton(menu_button_other_unclicked_array, menu_button_other_clicked_array,
-                           reward=2))
+            button = MenuButton(menu_button_other_unclicked_array, menu_button_other_clicked_array, reward=2)
+            dropdown_button_navigation_children.append(button)
+            self.__all_buttons.append(button)
 
         dropdown_button_navigation = DropdownButton(dropdown_navigation_unclicked_array,
                                                     np.array([next_pos, 12]),
                                                     dropdown_button_navigation_children, self,
                                                     dropdown_navigation_clicked_array, reward=2)
+        self.__all_buttons.append(dropdown_button_navigation)
 
         next_pos += dropdown_button_navigation.width
         main_window_children.append(dropdown_button_navigation)
 
         dropdown_button_tools_children = []
         for i in range(0, 2):
-            dropdown_button_tools_children.append(
-                MenuButton(menu_button_other_unclicked_array, menu_button_other_clicked_array,
-                           reward=2))
+            button = MenuButton(menu_button_other_unclicked_array, menu_button_other_clicked_array, reward=2)
+            dropdown_button_tools_children.append(button)
+            self.__all_buttons.append(button)
 
         dropdown_button_tools = DropdownButton(dropdown_tools_unclicked_array,
                                                np.array([next_pos, 12]),
                                                dropdown_button_tools_children, self,
                                                dropdown_tools_clicked_array, reward=2)
+        self.__all_buttons.append(dropdown_button_tools)
 
         next_pos += dropdown_button_tools.width
         main_window_children.append(dropdown_button_tools)
 
         menu_button_uber = MenuButton(menu_button_uber_unclicked_array, reward=2,
                                       on_click_listener=open_uber)
+        self.__all_buttons.append(menu_button_uber)
 
         dropdown_button_hilfe = DropdownButton(dropdown_hilfe_unclicked_array,
                                                np.array([next_pos, 12]),
                                                [menu_button_uber], self,
                                                dropdown_hilfe_clicked_array, reward=2)
+        self.__all_buttons.append(dropdown_button_hilfe)
 
         main_window_children.append(dropdown_button_hilfe)
 
         preferences_window_abbrechen_button = Button(preferences_window_abbrechen_button_array, np.array([315, 248]),
                                                      reward=2,
                                                      on_click_listener=close_window)
+        self.__all_buttons.append(preferences_window_abbrechen_button)
         preferences_window = Window(preferences_window_array, [preferences_window_abbrechen_button], np.array([2, 2]))
+
+        close_button = Button(close_button_array, np.array([80, 1]), reward=2, on_click_listener=close_window)
+        self.__all_buttons.append(close_button)
+        close_uber_button = Button(close_uber_window_button_array, np.array([1, 86]), reward=2,
+                                   on_click_listener=close_window)
+        self.__all_buttons.append(close_uber_button)
+        uber_window = Window(uber_window_array, [close_uber_button, close_button], np.array([273, 123]))
 
         # --------------------------------------------------------------------------------------------------
         # Return main window
@@ -243,7 +255,6 @@ class Application2(GymEnvironment):
 
         # Reset internal state
         self.__re_stack = False
-        self.__active_index = -1
         return self.__current_matrix, reward, self.__done
 
     def add_window(self, window: Window):
@@ -267,14 +278,14 @@ class Application2(GymEnvironment):
     def close(self):
         pass
 
-    def __remove_non_modals(self):
-        """
-        Remove all windows starting from the top and stopping at the active index
-        """
-        for i in range(-1, self.__active_index, -1):
-            removed = self.__windows.pop()
-            removed.reset()
-        self.__windows[-1].reset()
+    def get_progress(self):
+        progress_vector = []
+        for button in self.__all_buttons:
+            if button.reward_given:
+                progress_vector.append(1)
+            else:
+                progress_vector.append(0)
+        return np.array(progress_vector)
 
     def __stack_windows(self) -> np.ndarray:
         final = self.__windows[0].current_matrix

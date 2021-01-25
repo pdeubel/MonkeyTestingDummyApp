@@ -19,6 +19,8 @@ while running:
             result_matrix, reward, done = env.step(point)
             print('Reward: ' + str(reward))
             print('Done: ' + str(done))
+            if done:
+                print(env.get_progress())
             pygame.surfarray.blit_array(display, result_matrix)
             pygame.display.update()
 
