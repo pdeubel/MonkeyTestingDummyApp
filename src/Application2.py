@@ -19,12 +19,16 @@ class Application2(GymEnvironment):
         self.__width = window.width
         self.__height = window.height
         self.__re_stack = False
+        self.__done = False
         self.__active_index = -1
 
     def __init_components(self) -> Window:
         # Load images
         # --------------------------------------------------------------------------------------------------
         main_window_array = MatrixUtils.get_numpy_array_of_image('resources/drawables/main_window.png')
+
+        close_button_large_array = MatrixUtils.get_numpy_array_of_image(
+            'resources/drawables/close_window_button_big_unclicked.png')
 
         uber_window_array = MatrixUtils.get_numpy_array_of_image('resources/drawables/window_über.png')
 
@@ -94,6 +98,9 @@ class Application2(GymEnvironment):
         def close_window(btn: Button):
             self.remove_window()
 
+        def close_application(btn: Button):
+            self.__done = True
+
         # --------------------------------------------------------------------------------------------------
 
         # Initialize components
@@ -105,6 +112,9 @@ class Application2(GymEnvironment):
 
         next_pos = 0
         main_window_children = []
+
+        app_close_button = Button(close_button_large_array, np.array([380, 0]), reward=2, on_click_listener=close_application)
+        main_window_children.append(app_close_button)
 
         dropdown_button_datei_children = []
         for i in range(0, 10):
@@ -234,15 +244,9 @@ class Application2(GymEnvironment):
         # Reset internal state
         self.__re_stack = False
         self.__active_index = -1
-        return self.__current_matrix, reward
+        return self.__current_matrix, reward, self.__done
 
     def add_window(self, window: Window):
-        """
-        if self.__active_index == -1:
-            temp_i = len(self.__windows)
-        else:
-            temp_i = self.__active_index + 1
-        """
         self.__windows.append(window)
         self.__re_stack = True
 
@@ -250,9 +254,6 @@ class Application2(GymEnvironment):
         removed = self.__windows.pop()
         removed.reset()
         self.__windows[-1].reset()
-        # self.__windows[self.__active_index].reset()
-        # del self.__windows[self.__active_index]
-        # self.__windows[self.__active_index].reset()
         self.__re_stack = True
 
     def change_visibility(self, drawable: Drawable, value: bool):
@@ -276,12 +277,8 @@ class Application2(GymEnvironment):
         self.__windows[-1].reset()
 
     def __stack_windows(self) -> np.ndarray:
-        # if len(self.__windows) == 1:
-        # self.__windows[0].reset()
         final = self.__windows[0].current_matrix
         for k in range(1, len(self.__windows)):
-            # if k == len(self.__windows) - 1:
-            # self.__windows[k].reset()
             final = MatrixUtils.blit_image(final,
                                            self.__windows[k].current_matrix,
                                            self.__windows[k].relative_coordinates)

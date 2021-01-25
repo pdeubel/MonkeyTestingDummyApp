@@ -16,8 +16,9 @@ while running:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             point = np.array([event.pos[0], event.pos[1]])
-            result_matrix, reward = env.step(point)
+            result_matrix, reward, done = env.step(point)
             print('Reward: ' + str(reward))
+            print('Done: ' + str(done))
             pygame.surfarray.blit_array(display, result_matrix)
             pygame.display.update()
 
