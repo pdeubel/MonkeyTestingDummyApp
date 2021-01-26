@@ -18,3 +18,7 @@ class GymEnvironment(ABC):
     @abstractmethod
     def get_progress(self):
         pass
+
+    @abstractmethod
+    def render(self):
+        pass

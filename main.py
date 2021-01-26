@@ -25,3 +25,5 @@ while running:
             pygame.display.update()
 
 pygame.quit()
+print(env.get_progress())
+env.render()

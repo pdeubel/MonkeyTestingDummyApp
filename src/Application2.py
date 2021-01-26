@@ -7,6 +7,7 @@ from src.ui.DropdownButton import DropdownButton
 from src.ui.MenuButton import MenuButton
 from src.ui.Window import Window
 import numpy as np
+import cv2
 
 from src.util.MatrixUtils import MatrixUtils
 
@@ -290,6 +291,10 @@ class Application2(GymEnvironment):
 
     def close(self):
         pass
+
+    def render(self):
+        cv2.imshow('App', np.transpose(self.__current_matrix, (1, 0, 2)))
+        cv2.waitKey(0)
 
     def get_progress(self):
         progress_vector = []
