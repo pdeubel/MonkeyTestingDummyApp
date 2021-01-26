@@ -1,6 +1,7 @@
 from src.GymEnvironment import GymEnvironment
 from src.exception.InvalidActionError import InvalidActionError
 from src.ui.Button import Button
+from src.ui.Checkbox import Checkbox
 from src.ui.Drawable import Drawable
 from src.ui.DropdownButton import DropdownButton
 from src.ui.MenuButton import MenuButton
@@ -109,7 +110,8 @@ class Application2(GymEnvironment):
         next_pos = 0
         main_window_children = []
 
-        app_close_button = Button(close_button_large_array, np.array([380, 0]), reward=2, on_click_listener=close_application)
+        app_close_button = Button(close_button_large_array, np.array([380, 0]), reward=2,
+                                  on_click_listener=close_application)
         self.__all_buttons.append(app_close_button)
         main_window_children.append(app_close_button)
 
@@ -190,11 +192,22 @@ class Application2(GymEnvironment):
 
         main_window_children.append(dropdown_button_hilfe)
 
+        preferences_window_children = []
+        preferences_window_checkbox_coords = [[136, 25], [169, 102], [169, 113], [169, 125], [155, 145], [148, 206],
+                                              [148, 218], [148, 230], [312, 64], [312, 82], [312, 100], [312, 118],
+                                              [312, 136], [312, 154], [312, 172], [312, 190], [312, 208], [312, 226]]
+
+        for coord in preferences_window_checkbox_coords:
+            preferences_window_checkbox = Checkbox(np.array(coord), reward=2)
+            preferences_window_children.append(preferences_window_checkbox)
+            self.__all_buttons.append(preferences_window_checkbox)
+
         preferences_window_abbrechen_button = Button(preferences_window_abbrechen_button_array, np.array([315, 248]),
                                                      reward=2,
                                                      on_click_listener=close_window)
         self.__all_buttons.append(preferences_window_abbrechen_button)
-        preferences_window = Window(preferences_window_array, [preferences_window_abbrechen_button], np.array([2, 2]))
+        preferences_window_children.append(preferences_window_abbrechen_button)
+        preferences_window = Window(preferences_window_array, preferences_window_children, np.array([2, 2]))
 
         close_button = Button(close_button_array, np.array([80, 1]), reward=2, on_click_listener=close_window)
         self.__all_buttons.append(close_button)
