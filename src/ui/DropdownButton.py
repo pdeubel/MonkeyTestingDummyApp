@@ -1,6 +1,7 @@
 from numpy import ndarray
 import numpy as np
 
+from src import Application2
 from src.ui.Button import Button
 from src.ui.MenuButton import MenuButton
 from src.ui.Window import Window
@@ -13,12 +14,12 @@ class DropdownButton(Button):
                  matrix_unclicked: ndarray,
                  relative_coordinates: ndarray,
                  menu_buttons: list[MenuButton],
-                 app,
+                 app: Application2,
                  matrix_clicked: ndarray = None,
                  matrix_disabled: ndarray = None,
                  reward: int = 0):
         self.__parent_coords = None
-        self.__just_reset = False
+        self.__menu = None
         width, height = self.__get_menu_dimensions(menu_buttons)
         background_matrix = MatrixUtils.get_blank_image_as_numpy_array((242, 242, 242), width, height)
         border_matrix = MatrixUtils.get_blank_image_as_numpy_array((160, 160, 160), width + 2, height + 2)
@@ -29,11 +30,14 @@ class DropdownButton(Button):
             menu_button_pos = menu_button_pos + np.array([0, button.height])
 
         def on_click_listener(btn: Button):
-            if not self.clicked:
-                menu = Window(background_matrix, menu_buttons,
-                              self.__parent_coords + self.relative_coordinates + np.array([0, self.height]), False,
-                              True)
-                app.add_window(menu)
+            if app.is_window_recently_removed(self.__menu):
+                self.clicked = False
+            else:
+                self.__menu = Window(background_matrix, menu_buttons,
+                                     self.__parent_coords + self.relative_coordinates + np.array([0, self.height]),
+                                     False,
+                                     True)
+                app.add_window(self.__menu)
 
         super().__init__(matrix_unclicked, relative_coordinates, matrix_clicked, matrix_disabled, reward,
                          on_click_listener)

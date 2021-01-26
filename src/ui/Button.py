@@ -90,14 +90,14 @@ class Button(Drawable):
         if self.visible:
             if MatrixUtils.includes_point(click_coordinates, self.relative_coordinates + parent_coordinates, self.width,
                                           self.height):
-                # self.__clicked = not self.__clicked
+                self.__clicked = not self.__clicked
                 if self.__reward_given:
                     reward = 0
                 else:
                     self.__reward_given = True
                     reward = self.__reward
                 self.__on_click_listener(self)
-                self.__clicked = not self.__clicked
+                # self.__clicked = not self.__clicked
                 return reward, True, self._select_matrix(), parent_coordinates + self.relative_coordinates
 
         return 0, False, None, None

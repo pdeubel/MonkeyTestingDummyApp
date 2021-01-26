@@ -23,6 +23,7 @@ class Application2(GymEnvironment):
         self.__height = window.height
         self.__re_stack = False
         self.__done = False
+        self.__removed_windows = []
 
     def __init_components(self) -> Window:
         # Load images
@@ -256,8 +257,8 @@ class Application2(GymEnvironment):
                     if not MatrixUtils.includes_point(action, self.__windows[index].relative_coordinates,
                                                       self.__windows[index].width, self.__windows[index].height):
                         if self.__windows[index].auto_close:
-                            removed = self.__windows.pop()
-                            removed.reset()
+                            self.__removed_windows.append(self.__windows.pop())
+                            self.__removed_windows[-1].reset()
                             self.__windows[-1].reset()
                             self.__re_stack = True
                             number_of_del_windows += 1
@@ -269,6 +270,7 @@ class Application2(GymEnvironment):
 
         # Reset internal state
         self.__re_stack = False
+        self.__removed_windows.clear()
         return self.__current_matrix, reward, self.__done
 
     def add_window(self, window: Window):
@@ -318,3 +320,9 @@ class Application2(GymEnvironment):
                                            self.__windows[k].current_matrix,
                                            self.__windows[k].relative_coordinates)
         return final
+
+    def is_window_recently_removed(self, window):
+        for win in self.__removed_windows:
+            if win == window:
+                return True
+        return False
