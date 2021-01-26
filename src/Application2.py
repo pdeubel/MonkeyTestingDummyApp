@@ -287,7 +287,13 @@ class Application2(GymEnvironment):
         self.__re_stack = True
 
     def reset(self):
-        pass
+        self.__all_buttons = []
+        window = self.__init_components()
+        self.__windows = [window]
+        self.__current_matrix = window.current_matrix
+        self.__re_stack = False
+        self.__done = False
+        return self.__current_matrix
 
     def close(self):
         pass

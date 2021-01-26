@@ -15,14 +15,20 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            point = np.array([event.pos[0], event.pos[1]])
-            result_matrix, reward, done = env.step(point)
-            print('Reward: ' + str(reward))
-            print('Done: ' + str(done))
-            if done:
-                print(env.get_progress())
-            pygame.surfarray.blit_array(display, result_matrix)
-            pygame.display.update()
+            if event.button == 1:
+                point = np.array([event.pos[0], event.pos[1]])
+                result_matrix, reward, done = env.step(point)
+                print('Reward: ' + str(reward))
+                print('Done: ' + str(done))
+                if done:
+                    print(env.get_progress())
+                pygame.surfarray.blit_array(display, result_matrix)
+                pygame.display.update()
+            elif event.button == 3:
+                result_matrix = env.reset()
+                pygame.surfarray.blit_array(display, result_matrix)
+                pygame.display.update()
+
 
 pygame.quit()
 print(env.get_progress())
