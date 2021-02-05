@@ -1,5 +1,6 @@
 from numpy import ndarray
 import numpy as np
+from typing import List
 
 from src import Application2
 from src.ui.Button import Button
@@ -13,7 +14,7 @@ class DropdownButton(Button):
     def __init__(self,
                  matrix_unclicked: ndarray,
                  relative_coordinates: ndarray,
-                 menu_buttons: list[MenuButton],
+                 menu_buttons: List[MenuButton],
                  app: Application2,
                  matrix_clicked: ndarray = None,
                  matrix_disabled: ndarray = None,
@@ -46,7 +47,7 @@ class DropdownButton(Button):
         self.__parent_coords = parent_coordinates
         return super().click(click_coordinates, parent_coordinates)
 
-    def __get_menu_dimensions(self, menu_buttons: list[Button]):
+    def __get_menu_dimensions(self, menu_buttons: List[Button]):
         width, height = 0, 0
         for button in menu_buttons:
             height = height + button.height

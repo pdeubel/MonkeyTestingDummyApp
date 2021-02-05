@@ -1,4 +1,4 @@
-from collections import Callable
+from typing import Callable
 
 from numpy import ndarray
 import numpy as np

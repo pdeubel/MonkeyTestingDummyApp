@@ -1,6 +1,7 @@
 import numpy as np
 from PIL import Image
 from numpy import ndarray
+from typing import Tuple
 
 
 class MatrixUtils:
@@ -40,7 +41,7 @@ class MatrixUtils:
         return np.transpose(np.array(pic), (1, 0, 2))
 
     @staticmethod
-    def get_blank_image_as_numpy_array(color: tuple[int, int, int], width: int, height: int) -> ndarray:
+    def get_blank_image_as_numpy_array(color: Tuple[int, int, int], width: int, height: int) -> ndarray:
         red = np.full((width, height), color[0])
         green = np.full((width, height), color[1])
         blue = np.full((width, height), color[2])

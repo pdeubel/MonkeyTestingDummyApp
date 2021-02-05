@@ -1,7 +1,6 @@
 from __future__ import annotations
 from typing import Callable
 
-
 from numpy import ndarray
 
 from src.ui.Drawable import Drawable
@@ -111,7 +110,6 @@ class Button(Drawable):
     def reset(self):
         if self.__resettable:
             if self.__clicked:
-                print('RESET')
                 self.__clicked = False
                 return True
         return False
