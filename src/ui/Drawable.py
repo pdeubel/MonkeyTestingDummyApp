@@ -39,7 +39,7 @@ class Drawable(ABC):
         pass
 
     @abstractmethod
-    def draw_self(self, parent_coordinates: ndarray, parent_matrix: ndarray) -> ndarray:
+    def draw_self(self, parent_matrix: ndarray):
         pass
 
     @abstractmethod

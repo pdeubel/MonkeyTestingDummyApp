@@ -19,6 +19,7 @@ class DropdownButton(Button):
                  matrix_clicked: ndarray = None,
                  matrix_disabled: ndarray = None,
                  reward: int = 0):
+
         self.__parent_coords = None
         self.__menu = None
         width, height = self.__get_menu_dimensions(menu_buttons)
@@ -32,7 +33,7 @@ class DropdownButton(Button):
             menu_button_pos = menu_button_pos + np.array([0, button.height])
 
         def on_click_listener(btn: Button):
-            if app.is_window_recently_removed(self.__menu):
+            if app.is_window_going_to_be_removed(self.__menu):
                 self.clicked = False
             else:
                 self.__menu = Window(background_matrix, menu_buttons,

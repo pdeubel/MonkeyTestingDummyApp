@@ -100,11 +100,9 @@ class Button(Drawable):
 
         return 0, False, None, None
 
-    def draw_self(self, parent_coordinates: ndarray, parent_matrix: ndarray) -> ndarray:
+    def draw_self(self, parent_matrix: ndarray):
         if self.visible:
-            return MatrixUtils.blit_image_inplace(parent_matrix, self._select_matrix(),
-                                                  parent_coordinates + self.relative_coordinates)
-        return parent_matrix
+            return MatrixUtils.blit_image_inplace(parent_matrix, self._select_matrix(), self.relative_coordinates)
 
     def reset(self):
         if self.__resettable:

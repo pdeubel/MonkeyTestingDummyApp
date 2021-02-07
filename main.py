@@ -7,7 +7,7 @@ env = Application2()
 
 pygame.init()
 display = pygame.display.set_mode((env.width, env.height))
-pygame.surfarray.blit_array(display, env.current_matrix)
+pygame.surfarray.blit_array(display, env.frame_buffer)
 pygame.display.update()
 
 running = True
@@ -16,20 +16,22 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
+            # Left click
             if event.button == 1:
                 point = np.array([event.pos[0], event.pos[1]])
                 start = time.process_time()
-                result_matrix, reward, done = env.step(point)
+                observation, reward, done = env.step(point)
                 print('Frame Time: ' + str((time.process_time() - start) * 1000) + ' ms')
                 print('Reward: ' + str(reward))
                 print('Done: ' + str(done))
                 if done:
                     print(env.get_progress())
-                pygame.surfarray.blit_array(display, result_matrix)
+                pygame.surfarray.blit_array(display, observation)
                 pygame.display.update()
+            # Right click
             elif event.button == 3:
-                result_matrix = env.reset()
-                pygame.surfarray.blit_array(display, result_matrix)
+                observation = env.reset()
+                pygame.surfarray.blit_array(display, observation)
                 pygame.display.update()
 
 

@@ -37,11 +37,10 @@ class MatrixUtils:
 
     @staticmethod
     def includes_point(click_coordinates: ndarray, absolute_coordinates: ndarray, width: int, height: int) -> bool:
-        if absolute_coordinates[0] > click_coordinates[0] or absolute_coordinates[1] > click_coordinates[1]:
-            return False
-        if (absolute_coordinates[0] + width) < click_coordinates[0] or (absolute_coordinates[1] + height) < click_coordinates[1]:
-            return False
-        return True
+        if absolute_coordinates[0] <= click_coordinates[0] and absolute_coordinates[1] <= click_coordinates[1]:
+            if (absolute_coordinates[0] + width) >= click_coordinates[0] and (absolute_coordinates[1] + height) >= click_coordinates[1]:
+                return True
+        return False
 
     @staticmethod
     def get_numpy_array_of_image(path: str) -> ndarray:

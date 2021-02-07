@@ -7,6 +7,7 @@ from src.ui.DropdownButton import DropdownButton
 from src.ui.MenuButton import MenuButton
 from src.ui.Window import Window
 import numpy as np
+from numpy import ndarray
 import cv2
 
 from src.util.MatrixUtils import MatrixUtils
@@ -16,14 +17,14 @@ class Application2(GymEnvironment):
 
     def __init__(self):
         self.__all_buttons = []
-        window = self.__init_components()
-        self.__windows = [window]
-        self.__current_matrix = window.current_matrix.copy()
-        self.__width = window.width
-        self.__height = window.height
-        self.__re_stack = False
+        main_window = self.__init_components()
+        self.__windows = [main_window]
+        self.__frame_buffer = main_window.current_matrix.copy()
+        self.__width = main_window.width
+        self.__height = main_window.height
+        self.__should_re_stack = False
         self.__done = False
-        self.__removed_windows = []
+        self.__windows_to_be_removed = []
 
     def __init_components(self) -> Window:
         # Load images
@@ -67,8 +68,6 @@ class Application2(GymEnvironment):
 
         menu_button_uber_unclicked_array = MatrixUtils.get_numpy_array_of_image(
             'resources/drawables/menu_über_unclicked.png')
-        menu_button_uber_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/menu_über_clicked.png')
 
         menu_button_other_unclicked_array = MatrixUtils.get_numpy_array_of_image(
             'resources/drawables/menu_button_1.png')
@@ -77,8 +76,6 @@ class Application2(GymEnvironment):
 
         menu_button_preferences_unclicked_array = MatrixUtils.get_numpy_array_of_image(
             'resources/drawables/menu_button_preferences_unclicked.png')
-        menu_button_preferences_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/menu_button_preferences_clicked.png')
 
         # --------------------------------------------------------------------------------------------------
 
@@ -223,8 +220,8 @@ class Application2(GymEnvironment):
         return Window(main_window_array, main_window_children, np.array([0, 0]))
 
     @property
-    def current_matrix(self):
-        return self.__current_matrix
+    def frame_buffer(self):
+        return self.__frame_buffer
 
     @property
     def width(self):
@@ -234,76 +231,72 @@ class Application2(GymEnvironment):
     def height(self):
         return self.__height
 
-    def step(self, action):
+    def step(self, action: ndarray) -> (ndarray, int, bool):
         if type(action) is not np.ndarray:
             raise InvalidActionError('Invalid Action')
 
         reward = 0
-        number_of_del_windows = 0
+        number_of_windows_to_be_removed = 0
+
         # Click on windows starting with the topmost window down to the window at the bottom
         for i in range(-1, -len(self.__windows) - 1, -1):
-            index = i + number_of_del_windows
-            reward, includes_point, mat, coord = self.__windows[index].click(action)
-            if includes_point:
-                MatrixUtils.blit_image_inplace(self.__current_matrix, mat, coord)
+            index = i + number_of_windows_to_be_removed
+            reward, window_includes_point, clicked_child_component_matrix, clicked_child_component_coords = self.__windows[index].click(action)
+            if window_includes_point:
+                if clicked_child_component_matrix is not None:
+                    if not self.__should_re_stack:
+                        MatrixUtils.blit_image_inplace(self.__frame_buffer, clicked_child_component_matrix,
+                                                       clicked_child_component_coords)
                 break
             else:
                 if self.__windows[index].modal:
                     break
-                else:
-                    # Check if the click landed on somewhere in the window. If yes, don't close the non modal window
-                    # If no AND if auto_close is true -> change the active index to the index of the window below and
-                    # continue with the loop
-                    if not MatrixUtils.includes_point(action, self.__windows[index].relative_coordinates,
-                                                      self.__windows[index].width, self.__windows[index].height):
-                        if self.__windows[index].auto_close:
-                            removed_window = self.remove_window()
-                            self.__removed_windows.append(removed_window)
-                            number_of_del_windows += 1
-                    else:
-                        break
+                elif self.__windows[index].auto_close:
+                    removed_window = self.remove_window()
+                    self.__windows_to_be_removed.append(removed_window)
+                    number_of_windows_to_be_removed += 1
 
-        if self.__re_stack:
-            self.__current_matrix = self.__stack_windows()
+        if self.__should_re_stack:
+            self.__frame_buffer = self.__stack_windows()
 
         # Reset internal state
-        self.__re_stack = False
-        self.__removed_windows.clear()
-        return self.__current_matrix, reward, self.__done
+        self.__should_re_stack = False
+        self.__windows_to_be_removed.clear()
+        return self.__frame_buffer, reward, self.__done
 
     def add_window(self, window: Window):
         self.__windows.append(window)
-        MatrixUtils.blit_image_inplace(self.__current_matrix, window.current_matrix, window.relative_coordinates)
+        MatrixUtils.blit_image_inplace(self.__frame_buffer, window.current_matrix, window.relative_coordinates)
 
-    def remove_window(self):
+    def remove_window(self) -> Window:
         removed = self.__windows.pop()
         removed.reset()
         self.__windows[-1].reset()
-        self.__re_stack = True
+        self.__should_re_stack = True
         return removed
 
     def change_visibility(self, drawable: Drawable, value: bool):
         drawable.visible = value
-        self.__windows[-1].update_matrix()
-        self.__re_stack = True
+        self.__windows[-1].draw_self()
+        self.__should_re_stack = True
 
-    def reset(self):
+    def reset(self) -> ndarray:
         self.__all_buttons = []
-        window = self.__init_components()
-        self.__windows = [window]
-        self.__current_matrix = window.current_matrix.copy()
-        self.__re_stack = False
+        main_window = self.__init_components()
+        self.__windows = [main_window]
+        self.__frame_buffer = main_window.current_matrix.copy()
+        self.__should_re_stack = False
         self.__done = False
-        return self.__current_matrix
+        return self.__frame_buffer
 
     def close(self):
         pass
 
     def render(self):
-        cv2.imshow('App', np.transpose(self.__current_matrix, (1, 0, 2)))
+        cv2.imshow('App', np.transpose(self.__frame_buffer, (1, 0, 2)))
         cv2.waitKey(0)
 
-    def get_progress(self):
+    def get_progress(self) -> ndarray:
         progress_vector = []
         for button in self.__all_buttons:
             if button.reward_given:
@@ -312,14 +305,15 @@ class Application2(GymEnvironment):
                 progress_vector.append(0)
         return np.array(progress_vector)
 
-    def __stack_windows(self) -> np.ndarray:
-        final = self.__windows[0].current_matrix.copy()
-        for k in range(1, len(self.__windows)):
-            MatrixUtils.blit_image_inplace(final, self.__windows[k].current_matrix, self.__windows[k].relative_coordinates)
-        return final
-
-    def is_window_recently_removed(self, window):
-        for win in self.__removed_windows:
+    def is_window_going_to_be_removed(self, window: Window) -> bool:
+        for win in self.__windows_to_be_removed:
             if win == window:
                 return True
         return False
+
+    def __stack_windows(self) -> ndarray:
+        final = self.__windows[0].current_matrix.copy()
+        for k in range(1, len(self.__windows)):
+            MatrixUtils.blit_image_inplace(final, self.__windows[k].current_matrix,
+                                           self.__windows[k].relative_coordinates)
+        return final
