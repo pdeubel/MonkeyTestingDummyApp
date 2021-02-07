@@ -34,10 +34,9 @@ class Window(CompositeDrawable):
     def update_matrix(self):
         self.__current_matrix = self.draw_self()
 
-    def click(self, click_coordinates: ndarray, parent_coordinates: ndarray) -> (int, bool, ndarray, ndarray):
+    def click(self, click_coordinates: ndarray, parent_coordinates: ndarray = None) -> (int, bool, ndarray, ndarray):
         if self.visible:
-            if MatrixUtils.includes_point(click_coordinates, self.relative_coordinates, self.width,
-                                          self.height):
+            if MatrixUtils.includes_point(click_coordinates, self.relative_coordinates, self.width, self.height):
                 for child in self.children:
                     reward, includes_point, mat, coord = child.click(click_coordinates, self.relative_coordinates)
                     if includes_point:
@@ -47,29 +46,21 @@ class Window(CompositeDrawable):
         return 0, False, None, None
 
     def draw_self(self, parent_coordinates: ndarray = np.array([0, 0]), parent_matrix: ndarray = None) -> ndarray:
-        coords = parent_coordinates + self.relative_coordinates
-        if parent_matrix is None:
-            parent_matrix = self.matrix_self.copy()
-            coords = parent_coordinates
-
-        if not self.visible:
-            return parent_matrix
-
-        temp = MatrixUtils.blit_image(parent_matrix, self.matrix_self,
-                                      coords)
+        temp = self.matrix_self.copy()
         for child in self.children:
-            temp = child.draw_self(coords, temp)
+            child.draw_self(parent_coordinates, temp)
 
         return temp
 
     def reset(self) -> bool:
-        comp_changed = super().reset()
-        if comp_changed:
-            self.__current_matrix = self.draw_self()
-        return comp_changed
+        was_reset = False
+        for child in self.children:
+            res = child.reset()
+            if res:
+                was_reset = True
+                child.draw_self(np.array([0, 0]), self.__current_matrix)
+
+        return was_reset
 
     def __blit_single_drawable(self, component_matrix: ndarray, abs_coords: ndarray):
-        self.__current_matrix = MatrixUtils.blit_image(
-            self.__current_matrix,
-            component_matrix,
-            abs_coords - self.relative_coordinates)
+        MatrixUtils.blit_image_inplace(self.__current_matrix, component_matrix, abs_coords - self.relative_coordinates)

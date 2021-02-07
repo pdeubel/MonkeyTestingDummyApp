@@ -24,10 +24,3 @@ class CompositeDrawable(Drawable, ABC):
     @property
     def matrix_self(self):
         return self.__matrix_self
-
-    def reset(self) -> bool:
-        comp_changed = False
-        for child in self.__children:
-            res = child.reset()
-            comp_changed = comp_changed or res
-        return comp_changed

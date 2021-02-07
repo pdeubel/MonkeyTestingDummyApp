@@ -18,7 +18,7 @@ class Application2(GymEnvironment):
         self.__all_buttons = []
         window = self.__init_components()
         self.__windows = [window]
-        self.__current_matrix = window.current_matrix
+        self.__current_matrix = window.current_matrix.copy()
         self.__width = window.width
         self.__height = window.height
         self.__re_stack = False
@@ -243,9 +243,9 @@ class Application2(GymEnvironment):
         # Click on windows starting with the topmost window down to the window at the bottom
         for i in range(-1, -len(self.__windows) - 1, -1):
             index = i + number_of_del_windows
-            reward, includes_point, mat, coord = self.__windows[index].click(action, np.array([0, 0]))
+            reward, includes_point, mat, coord = self.__windows[index].click(action)
             if includes_point:
-                self.__current_matrix = MatrixUtils.blit_image(self.__current_matrix, mat, coord)
+                MatrixUtils.blit_image_inplace(self.__current_matrix, mat, coord)
                 break
             else:
                 if self.__windows[index].modal:
@@ -257,10 +257,8 @@ class Application2(GymEnvironment):
                     if not MatrixUtils.includes_point(action, self.__windows[index].relative_coordinates,
                                                       self.__windows[index].width, self.__windows[index].height):
                         if self.__windows[index].auto_close:
-                            self.__removed_windows.append(self.__windows.pop())
-                            self.__removed_windows[-1].reset()
-                            self.__windows[-1].reset()
-                            self.__re_stack = True
+                            removed_window = self.remove_window()
+                            self.__removed_windows.append(removed_window)
                             number_of_del_windows += 1
                     else:
                         break
@@ -275,13 +273,14 @@ class Application2(GymEnvironment):
 
     def add_window(self, window: Window):
         self.__windows.append(window)
-        self.__re_stack = True
+        MatrixUtils.blit_image_inplace(self.__current_matrix, window.current_matrix, window.relative_coordinates)
 
     def remove_window(self):
         removed = self.__windows.pop()
         removed.reset()
         self.__windows[-1].reset()
         self.__re_stack = True
+        return removed
 
     def change_visibility(self, drawable: Drawable, value: bool):
         drawable.visible = value
@@ -292,7 +291,7 @@ class Application2(GymEnvironment):
         self.__all_buttons = []
         window = self.__init_components()
         self.__windows = [window]
-        self.__current_matrix = window.current_matrix
+        self.__current_matrix = window.current_matrix.copy()
         self.__re_stack = False
         self.__done = False
         return self.__current_matrix
@@ -314,11 +313,9 @@ class Application2(GymEnvironment):
         return np.array(progress_vector)
 
     def __stack_windows(self) -> np.ndarray:
-        final = self.__windows[0].current_matrix
+        final = self.__windows[0].current_matrix.copy()
         for k in range(1, len(self.__windows)):
-            final = MatrixUtils.blit_image(final,
-                                           self.__windows[k].current_matrix,
-                                           self.__windows[k].relative_coordinates)
+            MatrixUtils.blit_image_inplace(final, self.__windows[k].current_matrix, self.__windows[k].relative_coordinates)
         return final
 
     def is_window_recently_removed(self, window):

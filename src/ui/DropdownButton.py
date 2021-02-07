@@ -24,7 +24,8 @@ class DropdownButton(Button):
         width, height = self.__get_menu_dimensions(menu_buttons)
         background_matrix = MatrixUtils.get_blank_image_as_numpy_array((242, 242, 242), width, height)
         border_matrix = MatrixUtils.get_blank_image_as_numpy_array((160, 160, 160), width + 2, height + 2)
-        background_matrix = MatrixUtils.blit_image(border_matrix, background_matrix, np.array([1, 1]))
+        MatrixUtils.blit_image_inplace(border_matrix, background_matrix, np.array([1, 1]))
+        background_matrix = border_matrix
         menu_button_pos = np.array([1, 1])
         for button in menu_buttons:
             button.relative_coordinates = menu_button_pos

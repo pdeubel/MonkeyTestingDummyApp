@@ -11,10 +11,12 @@ class MatrixUtils:
     @staticmethod
     def __blit_single_channel(dest: ndarray, src: ndarray, loc: ndarray) -> ndarray:
         d = np.array(dest, copy=True)
-        target = d[tuple(slice(i, None) for i in loc)]
-        s = src[tuple(slice(i) for i in target.shape)]
-        target[tuple(slice(None, i) for i in src.shape)] = s
+        d[loc[0]:loc[0] + src.shape[0], loc[1]:loc[1] + src.shape[1]] = src
         return d
+
+    @staticmethod
+    def __blit_single_channel_inplace(dest: ndarray, src: ndarray, loc: ndarray):
+        dest[loc[0]:loc[0] + src.shape[0], loc[1]:loc[1] + src.shape[1]] = src
 
     @staticmethod
     def __merge_channels(red: ndarray, green: ndarray, blue: ndarray) -> ndarray:
@@ -26,6 +28,12 @@ class MatrixUtils:
         blitted_green = MatrixUtils.__blit_single_channel(dest[:, :, 1], src[:, :, 1], loc)
         blitted_blue = MatrixUtils.__blit_single_channel(dest[:, :, 2], src[:, :, 2], loc)
         return MatrixUtils.__merge_channels(blitted_red, blitted_green, blitted_blue)
+
+    @staticmethod
+    def blit_image_inplace(dest: ndarray, src: ndarray, loc: ndarray):
+        MatrixUtils.__blit_single_channel_inplace(dest[:, :, 0], src[:, :, 0], loc)
+        MatrixUtils.__blit_single_channel_inplace(dest[:, :, 1], src[:, :, 1], loc)
+        MatrixUtils.__blit_single_channel_inplace(dest[:, :, 2], src[:, :, 2], loc)
 
     @staticmethod
     def includes_point(click_coordinates: ndarray, absolute_coordinates: ndarray, width: int, height: int) -> bool:
