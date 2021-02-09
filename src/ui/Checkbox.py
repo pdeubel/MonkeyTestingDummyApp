@@ -17,6 +17,13 @@ class Checkbox(Button):
                  relative_coordinates: ndarray,
                  reward: int,
                  on_click_listener: Callable[[Button], None] = lambda b: None):
+        """
+        A :class:`Button` with checkbox appearance
+
+        :param relative_coordinates: Coordinates of the button relative to its parent Drawable
+        :param reward: The amount of reward this button generates when clicked for the first time
+        :param on_click_listener: Function which is called when the button is clicked
+        """
         super().__init__(array_unclicked,
                          relative_coordinates,
                          array_clicked,

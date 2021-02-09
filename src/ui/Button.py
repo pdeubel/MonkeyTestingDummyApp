@@ -18,7 +18,8 @@ class Button(Drawable):
                  on_click_listener: Callable[[Button], None] = lambda b: None,
                  resettable: bool = True):
         """
-        A simple button with an on click listener. Each button generates a fixed amount of reward when clicked.
+        A simple button with an on click listener. Each button generates a fixed amount of reward when clicked for the
+        first time.
         A button which was already clicked at least once will still call its listener when clicked, however it does not
         generate any more rewards.
 

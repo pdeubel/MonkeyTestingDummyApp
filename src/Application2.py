@@ -244,6 +244,8 @@ class Application2(GymEnvironment):
             reward, window_includes_point, clicked_child_component_matrix, clicked_child_component_coords = self.__windows[index].click(action)
             if window_includes_point:
                 if clicked_child_component_matrix is not None:
+                    # Blit the changed component directly on the frame buffer, only if the clicked component is
+                    # in the topmost window
                     if not self.__should_re_stack:
                         MatrixUtils.blit_image_inplace(self.__frame_buffer, clicked_child_component_matrix,
                                                        clicked_child_component_coords)
@@ -252,6 +254,7 @@ class Application2(GymEnvironment):
                 if self.__windows[index].modal:
                     break
                 elif self.__windows[index].auto_close:
+                    # Save the removed window for future reference
                     removed_window = self.remove_window()
                     self.__windows_to_be_removed.append(removed_window)
                     number_of_windows_to_be_removed += 1

@@ -19,20 +19,31 @@ class DropdownButton(Button):
                  matrix_clicked: ndarray = None,
                  matrix_disabled: ndarray = None,
                  reward: int = 0):
+        """
+        A :class:`Button` which opens a dropdown menu when clicked. The dropdown menu consists of :class:`MenuButton`'s
+
+        :param matrix_unclicked: Image matrix of the button in unclicked state
+        :param relative_coordinates: Coordinates of the button relative to its parent Drawable
+        :param menu_buttons: A List of MenuButton's to be shown on the dropdown menu
+        :param app: The main application object
+        :param matrix_clicked: Image matrix of the button in clicked state
+        :param matrix_disabled: Image matrix of the button in disabled state
+        :param reward: The amount of reward this button generates when clicked for the first time
+        """
 
         self.__parent_coords = None
         self.__menu = None
-        width, height = self.__get_menu_dimensions(menu_buttons)
-        background_matrix = MatrixUtils.get_blank_image_as_numpy_array((242, 242, 242), width, height)
-        border_matrix = MatrixUtils.get_blank_image_as_numpy_array((160, 160, 160), width + 2, height + 2)
-        MatrixUtils.blit_image_inplace(border_matrix, background_matrix, np.array([1, 1]))
-        background_matrix = border_matrix
+        dropdown_menu_width, dropdown_menu_height = self.__calculate_menu_dimensions(menu_buttons)
+        background_matrix = MatrixUtils.get_blank_image_as_numpy_array((160, 160, 160), dropdown_menu_width + 2, dropdown_menu_height + 2)
+
+        # Set relative positions of menu buttons
         menu_button_pos = np.array([1, 1])
         for button in menu_buttons:
             button.relative_coordinates = menu_button_pos
             menu_button_pos = menu_button_pos + np.array([0, button.height])
 
         def on_click_listener(btn: Button):
+            # Button is clicked while its dropdown menu was active -> Make button unclicked instead of opening the menu
             if app.is_window_going_to_be_removed(self.__menu):
                 self.clicked = False
             else:
@@ -46,10 +57,11 @@ class DropdownButton(Button):
                          on_click_listener)
 
     def click(self, click_coordinates: ndarray, parent_coordinates: ndarray) -> (int, bool, ndarray, ndarray):
+        # Capture the parent coordinates here, since the children don't know their parents
         self.__parent_coords = parent_coordinates
         return super().click(click_coordinates, parent_coordinates)
 
-    def __get_menu_dimensions(self, menu_buttons: List[Button]):
+    def __calculate_menu_dimensions(self, menu_buttons: List[Button]):
         width, height = 0, 0
         for button in menu_buttons:
             height = height + button.height

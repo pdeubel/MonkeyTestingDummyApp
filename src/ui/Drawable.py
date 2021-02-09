@@ -5,7 +5,7 @@ from numpy import ndarray
 
 class Drawable(ABC):
     """
-
+    The parent class of all components which can be drawn on a screen
     """
     @abstractmethod
     def __init__(self, relative_coordinates: ndarray, width: int, height: int):

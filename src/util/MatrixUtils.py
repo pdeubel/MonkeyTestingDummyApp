@@ -31,6 +31,13 @@ class MatrixUtils:
 
     @staticmethod
     def blit_image_inplace(dest: ndarray, src: ndarray, loc: ndarray):
+        """
+        Blits the source array on the destination array at a specified location inplace.
+
+        :param dest: Destination array
+        :param src: Source array
+        :param loc: Location on the destination array on which the blit will take place
+        """
         MatrixUtils.__blit_single_channel_inplace(dest[:, :, 0], src[:, :, 0], loc)
         MatrixUtils.__blit_single_channel_inplace(dest[:, :, 1], src[:, :, 1], loc)
         MatrixUtils.__blit_single_channel_inplace(dest[:, :, 2], src[:, :, 2], loc)
