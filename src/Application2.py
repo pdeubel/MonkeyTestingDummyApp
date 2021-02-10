@@ -81,25 +81,36 @@ class Application2(GymEnvironment):
 
         # Define click listeners
         # --------------------------------------------------------------------------------------------------
-        def open_uber(btn: Button):
+        def open_uber(_):
             # Close dropdown menu first
             self.remove_window()
             self.add_window(uber_window)
 
-        def open_preferences(btn: Button):
+        def open_preferences(_):
             # Close dropdown menu first
             self.remove_window()
             self.add_window(preferences_window)
+
+        def open_dropdown_menu(btn: DropdownButton):
+            # Button is clicked while its dropdown menu was active -> Make button unclicked instead of opening the menu
+            if self.is_window_going_to_be_removed(btn.menu):
+                btn.clicked = False
+            else:
+                btn.menu = Window(btn.background_matrix, btn.menu_buttons,
+                                  btn.parent_coords + btn.relative_coordinates + np.array([0, btn.height]),
+                                  False,
+                                  True)
+                self.add_window(btn.menu)
 
         """
         def hide_button(btn: Button):
             self.change_visibility(btn, not btn.visible)
         """
 
-        def close_window(btn: Button):
+        def close_window(_):
             self.remove_window()
 
-        def close_application(btn: Button):
+        def close_application(_):
             self.__done = True
 
         # --------------------------------------------------------------------------------------------------
@@ -127,8 +138,9 @@ class Application2(GymEnvironment):
         self.__all_buttons.append(preferences_button)
 
         dropdown_button_datei = DropdownButton(dropdown_datei_unclicked_array, np.array([next_pos, 12]),
-                                               dropdown_button_datei_children, self,
-                                               dropdown_datei_clicked_array, reward=2)
+                                               dropdown_button_datei_children,
+                                               dropdown_datei_clicked_array, reward=2,
+                                               on_click_listener=open_dropdown_menu)
         self.__all_buttons.append(dropdown_button_datei)
 
         next_pos += dropdown_button_datei.width
@@ -142,8 +154,9 @@ class Application2(GymEnvironment):
 
         dropdown_button_anzeigen = DropdownButton(dropdown_anzeigen_unclicked_array,
                                                   np.array([next_pos, 12]),
-                                                  dropdown_button_anzeigen_children, self,
-                                                  dropdown_anzeigen_clicked_array, reward=2)
+                                                  dropdown_button_anzeigen_children,
+                                                  dropdown_anzeigen_clicked_array, reward=2,
+                                                  on_click_listener=open_dropdown_menu)
         self.__all_buttons.append(dropdown_button_anzeigen)
 
         next_pos += dropdown_button_anzeigen.width
@@ -157,8 +170,9 @@ class Application2(GymEnvironment):
 
         dropdown_button_navigation = DropdownButton(dropdown_navigation_unclicked_array,
                                                     np.array([next_pos, 12]),
-                                                    dropdown_button_navigation_children, self,
-                                                    dropdown_navigation_clicked_array, reward=2)
+                                                    dropdown_button_navigation_children,
+                                                    dropdown_navigation_clicked_array, reward=2,
+                                                    on_click_listener=open_dropdown_menu)
         self.__all_buttons.append(dropdown_button_navigation)
 
         next_pos += dropdown_button_navigation.width
@@ -172,8 +186,9 @@ class Application2(GymEnvironment):
 
         dropdown_button_tools = DropdownButton(dropdown_tools_unclicked_array,
                                                np.array([next_pos, 12]),
-                                               dropdown_button_tools_children, self,
-                                               dropdown_tools_clicked_array, reward=2)
+                                               dropdown_button_tools_children,
+                                               dropdown_tools_clicked_array, reward=2,
+                                               on_click_listener=open_dropdown_menu)
         self.__all_buttons.append(dropdown_button_tools)
 
         next_pos += dropdown_button_tools.width
@@ -185,8 +200,9 @@ class Application2(GymEnvironment):
 
         dropdown_button_hilfe = DropdownButton(dropdown_hilfe_unclicked_array,
                                                np.array([next_pos, 12]),
-                                               [menu_button_uber], self,
-                                               dropdown_hilfe_clicked_array, reward=2)
+                                               [menu_button_uber],
+                                               dropdown_hilfe_clicked_array, reward=2,
+                                               on_click_listener=open_dropdown_menu)
         self.__all_buttons.append(dropdown_button_hilfe)
 
         main_window_children.append(dropdown_button_hilfe)
