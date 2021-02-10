@@ -97,13 +97,16 @@ class Button(Drawable):
                     self.__reward_given = True
                     reward = self.__reward
                 self.__on_click_listener(self)
-                return reward, True, self._select_matrix(), parent_coordinates + self.relative_coordinates
+                return reward, True, self._select_matrix(), self.relative_coordinates
 
         return 0, False, None, None
 
     def draw_self(self, parent_matrix: ndarray):
         if self.visible:
-            return MatrixUtils.blit_image_inplace(parent_matrix, self._select_matrix(), self.relative_coordinates)
+            return MatrixUtils.blit_image_inplace(parent_matrix,
+                                                  self._select_matrix(),
+                                                  self.relative_coordinates[0],
+                                                  self.relative_coordinates[1])
 
     def reset(self):
         if self.__resettable:

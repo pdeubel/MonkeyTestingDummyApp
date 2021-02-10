@@ -247,8 +247,10 @@ class Application2(GymEnvironment):
                     # Blit the changed component directly on the frame buffer, only if the clicked component is
                     # in the topmost window
                     if not self.__should_re_stack:
-                        MatrixUtils.blit_image_inplace(self.__frame_buffer, clicked_child_component_matrix,
-                                                       clicked_child_component_coords)
+                        MatrixUtils.blit_image_inplace(self.__frame_buffer,
+                                                       clicked_child_component_matrix,
+                                                       clicked_child_component_coords[0],
+                                                       clicked_child_component_coords[1])
                 break
             else:
                 if self.__windows[index].modal:
@@ -269,7 +271,9 @@ class Application2(GymEnvironment):
 
     def add_window(self, window: Window):
         self.__windows.append(window)
-        MatrixUtils.blit_image_inplace(self.__frame_buffer, window.current_matrix, window.relative_coordinates)
+        MatrixUtils.blit_image_inplace(self.__frame_buffer,
+                                       window.current_matrix,
+                                       window.relative_coordinates[0], window.relative_coordinates[1])
 
     def remove_window(self) -> Window:
         removed = self.__windows.pop()
@@ -317,6 +321,7 @@ class Application2(GymEnvironment):
     def __stack_windows(self) -> ndarray:
         final = self.__windows[0].current_matrix.copy()
         for k in range(1, len(self.__windows)):
+            window_coords = self.__windows[k].relative_coordinates
             MatrixUtils.blit_image_inplace(final, self.__windows[k].current_matrix,
-                                           self.__windows[k].relative_coordinates)
+                                           window_coords[0], window_coords[1])
         return final
