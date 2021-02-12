@@ -3,7 +3,7 @@ from typing import Callable
 from numpy import ndarray
 import numpy as np
 
-from src.ui.Button import Button
+from gym_jadx.ui.Button import Button
 
 
 class MenuButton(Button):

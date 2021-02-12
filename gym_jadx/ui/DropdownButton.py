@@ -2,9 +2,9 @@ from numpy import ndarray
 import numpy as np
 from typing import List, Callable
 
-from src.ui.Button import Button
-from src.ui.MenuButton import MenuButton
-from src.util.MatrixUtils import MatrixUtils
+from gym_jadx.ui.Button import Button
+from gym_jadx.ui.MenuButton import MenuButton
+from gym_jadx.util.MatrixUtils import MatrixUtils
 
 
 class DropdownButton(Button):

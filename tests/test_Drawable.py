@@ -3,7 +3,7 @@ from unittest import TestCase
 import numpy as np
 from PIL import Image
 
-from src.ui.Button import Button
+from gym_jadx.ui.Button import Button
 
 
 class MyTestCase(TestCase):

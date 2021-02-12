@@ -1,10 +1,10 @@
-from src.Application2 import Application2
+from gym_jadx.envs.jadx_env import JadxEnv
 import pygame
 import numpy as np
 import time
 import cv2
 
-env = Application2()
+env = JadxEnv()
 DISPLAY_SIZE = (1280, 720)
 ENV_SIZE = (env.width, env.height)
 WIDTH_RATIO = DISPLAY_SIZE[0] / ENV_SIZE[0]

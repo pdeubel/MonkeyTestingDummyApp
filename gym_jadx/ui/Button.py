@@ -3,8 +3,8 @@ from typing import Callable
 
 from numpy import ndarray
 
-from src.ui.Drawable import Drawable
-from src.util.MatrixUtils import MatrixUtils
+from gym_jadx.ui.Drawable import Drawable
+from gym_jadx.util.MatrixUtils import MatrixUtils
 
 
 class Button(Drawable):

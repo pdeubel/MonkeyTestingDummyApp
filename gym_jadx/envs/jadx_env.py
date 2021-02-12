@@ -1,19 +1,20 @@
-from src.GymEnvironment import GymEnvironment
-from src.exception.InvalidActionError import InvalidActionError
-from src.ui.Button import Button
-from src.ui.Checkbox import Checkbox
-from src.ui.Drawable import Drawable
-from src.ui.DropdownButton import DropdownButton
-from src.ui.MenuButton import MenuButton
-from src.ui.Window import Window
+from gym_jadx.exception.InvalidActionError import InvalidActionError
+from gym_jadx.ui.Button import Button
+from gym_jadx.ui.Checkbox import Checkbox
+from gym_jadx.ui.Drawable import Drawable
+from gym_jadx.ui.DropdownButton import DropdownButton
+from gym_jadx.ui.MenuButton import MenuButton
+from gym_jadx.ui.Window import Window
 import numpy as np
 from numpy import ndarray
 import cv2
+import gym
 
-from src.util.MatrixUtils import MatrixUtils
+from gym_jadx.util.MatrixUtils import MatrixUtils
 
 
-class Application2(GymEnvironment):
+class JadxEnv(gym.Env):
+    metadata = {'render.modes': ['human']}
 
     def __init__(self):
         self.__all_buttons = []
@@ -226,7 +227,7 @@ class Application2(GymEnvironment):
 
         close_button = Button(close_button_array, np.array([80, 1]), reward=2, on_click_listener=close_window)
         self.__all_buttons.append(close_button)
-        close_uber_button = Button(close_uber_window_button_array, np.array([1, 86]), reward=2,
+        close_uber_button = Button(close_uber_window_button_array, np.array([1, 87]), reward=2,
                                    on_click_listener=close_window)
         self.__all_buttons.append(close_uber_button)
         uber_window = Window(uber_window_array, [close_uber_button, close_button], np.array([273, 123]))
@@ -283,7 +284,7 @@ class Application2(GymEnvironment):
         # Reset internal state
         self.__should_re_stack = False
         self.__windows_to_be_removed.clear()
-        return self.__frame_buffer, reward, self.__done
+        return self.__frame_buffer, reward, self.__done, None
 
     def add_window(self, window: Window):
         self.__windows.append(window)
@@ -315,7 +316,7 @@ class Application2(GymEnvironment):
     def close(self):
         pass
 
-    def render(self):
+    def render(self, mode='human'):
         cv2.imshow('App', np.transpose(self.__frame_buffer, (1, 0, 2)))
         cv2.waitKey(0)
 

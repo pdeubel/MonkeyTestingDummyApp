@@ -1,7 +1,7 @@
 from numpy import ndarray
 from typing import List
 
-from src.ui.Drawable import Drawable
+from gym_jadx.ui.Drawable import Drawable
 from abc import ABC, abstractmethod
 
 

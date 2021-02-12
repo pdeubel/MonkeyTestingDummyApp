@@ -2,8 +2,8 @@ from typing import Callable
 
 from numpy import ndarray
 
-from src.ui.Button import Button
-from src.util.MatrixUtils import MatrixUtils
+from gym_jadx.ui.Button import Button
+from gym_jadx.util.MatrixUtils import MatrixUtils
 
 
 class Checkbox(Button):

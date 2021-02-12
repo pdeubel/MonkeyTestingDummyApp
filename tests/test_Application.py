@@ -1,13 +1,13 @@
 import unittest
 from unittest import TestCase
 
-from src.Application2 import Application2
-from src.exception.InvalidActionError import InvalidActionError
+from gym_jadx.envs.jadx_env import JadxEnv
+from gym_jadx.exception.InvalidActionError import InvalidActionError
 
 
 class TestApplication(TestCase):
     def setUp(self):
-        self.application = Application2()
+        self.application = JadxEnv()
 
     def test_step_invalid_action(self):
         with self.assertRaises(InvalidActionError):

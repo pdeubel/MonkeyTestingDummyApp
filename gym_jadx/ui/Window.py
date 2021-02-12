@@ -1,9 +1,9 @@
 from numpy import ndarray
 from typing import List
 
-from src.ui.CompositeDrawable import CompositeDrawable
-from src.ui.Drawable import Drawable
-from src.util.MatrixUtils import MatrixUtils
+from gym_jadx.ui.CompositeDrawable import CompositeDrawable
+from gym_jadx.ui.Drawable import Drawable
+from gym_jadx.util.MatrixUtils import MatrixUtils
 
 
 class Window(CompositeDrawable):
