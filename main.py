@@ -26,7 +26,7 @@ while running:
             if event.button == 1:
                 point = np.array([event.pos[0] / WIDTH_RATIO, event.pos[1] / HEIGHT_RATIO])
                 start = time.process_time()
-                observation, reward, done = env.step(point)
+                observation, reward, done, _ = env.step(point)
                 print('Frame Time: ' + str((time.process_time() - start) * 1000) + ' ms')
                 print('Reward: ' + str(reward))
                 print('Done: ' + str(done))

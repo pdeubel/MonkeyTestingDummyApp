@@ -51,7 +51,7 @@ class MatrixUtils:
         Loads an image and converts it to a numpy array.
 
         :param path: A filename (string), pathlib.Path object or a file object. The file object must implement
-        ``file.read``, ``file.seek``, and ``file.tell`` methods, and be opened in binary mode.
+            ``file.read``, ``file.seek``, and ``file.tell`` methods, and be opened in binary mode.
         :return: A numpy array of the loaded image
         """
         pic = Image.open(path).convert('RGB')
