@@ -1,4 +1,3 @@
-from gym_jadx.exception.InvalidActionError import InvalidActionError
 from gym_jadx.ui.Button import Button
 from gym_jadx.ui.Checkbox import Checkbox
 from gym_jadx.ui.Drawable import Drawable
@@ -65,9 +64,6 @@ class JadxEnv(gym.Env):
         return np.array(progress_vector)
 
     def step(self, action: ndarray) -> (ndarray, int, bool):
-        if type(action) is not np.ndarray:
-            raise InvalidActionError('Invalid Action')
-
         reward = 0
         number_of_windows_to_be_removed = 0
 
@@ -138,152 +134,50 @@ class JadxEnv(gym.Env):
     def __init_components(self) -> Window:
         # Load drawable images
         # --------------------------------------------------------------------------------------------------
-        main_window_array = MatrixUtils.get_numpy_array_of_image('resources/drawables/main_window.png')
+        main_window_array = MatrixUtils.get_numpy_array_of_image('main_window.png')
 
-        close_button_large_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/close_window_button_large_unclicked.png')
+        close_button_large_array = MatrixUtils.get_numpy_array_of_image('close_window_button_large_unclicked.png')
 
-        uber_window_array = MatrixUtils.get_numpy_array_of_image('resources/drawables/window_über.png')
+        uber_window_array = MatrixUtils.get_numpy_array_of_image('window_über.png')
 
-        close_uber_window_button_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/close_über_window_button.png')
-        close_button_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/close_window_button_unclicked.png')
+        close_uber_window_button_array = MatrixUtils.get_numpy_array_of_image('close_über_window_button.png')
+        close_button_array = MatrixUtils.get_numpy_array_of_image('close_window_button_unclicked.png')
 
-        preferences_window_array = MatrixUtils.get_numpy_array_of_image('resources/drawables/window_preferences.png')
-        preferences_window_abbrechen_button_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/button_abbrechen_unclicked.png')
-        preferences_window_speichern_button_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/button_speichern_unclicked.png')
-        preferences_window_zuruecksetzen_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/button_zuruecksetzen_unclicked.png')
-        preferences_window_zuruecksetzen_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/button_zuruecksetzen_clicked.png')
-        preferences_window_clipboard_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/button_clipboard_unclicked.png')
-        preferences_window_clipboard_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/button_clipboard_clicked.png')
-        preferences_window_aendern_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/button_aendern_unclicked.png')
-        preferences_window_aendern_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/button_aendern_clicked.png')
-        preferences_window_bearbeiten_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/button_bearbeiten_unclicked.png')
-        preferences_window_bearbeiten_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/button_bearbeiten_clicked.png')
-        close_pref_array = MatrixUtils.get_numpy_array_of_image('resources/drawables/close_pref_button.png')
+        preferences_window_array = MatrixUtils.get_numpy_array_of_image('window_preferences.png')
+        preferences_window_abbrechen_button_array = MatrixUtils.get_numpy_array_of_image('button_abbrechen_unclicked.png')
+        preferences_window_speichern_button_array = MatrixUtils.get_numpy_array_of_image('button_speichern_unclicked.png')
+        preferences_window_zuruecksetzen_unclicked_array = MatrixUtils.get_numpy_array_of_image('button_zuruecksetzen_unclicked.png')
+        preferences_window_zuruecksetzen_clicked_array = MatrixUtils.get_numpy_array_of_image('button_zuruecksetzen_clicked.png')
+        preferences_window_clipboard_unclicked_array = MatrixUtils.get_numpy_array_of_image('button_clipboard_unclicked.png')
+        preferences_window_clipboard_clicked_array = MatrixUtils.get_numpy_array_of_image('button_clipboard_clicked.png')
+        preferences_window_aendern_unclicked_array = MatrixUtils.get_numpy_array_of_image('button_aendern_unclicked.png')
+        preferences_window_aendern_clicked_array = MatrixUtils.get_numpy_array_of_image('button_aendern_clicked.png')
+        preferences_window_bearbeiten_unclicked_array = MatrixUtils.get_numpy_array_of_image('button_bearbeiten_unclicked.png')
+        preferences_window_bearbeiten_clicked_array = MatrixUtils.get_numpy_array_of_image('button_bearbeiten_clicked.png')
+        preferences_window_close_array = MatrixUtils.get_numpy_array_of_image('close_pref_button.png')
 
-        dropdown_datei_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/drpdwn_datei_unclicked.png')
-        dropdown_datei_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/drpdwn_datei_clicked.png')
-        dropdown_anzeigen_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/drpdwn_anzeigen_unclicked.png')
-        dropdown_anzeigen_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/drpdwn_anzeigen.png')
-        dropdown_hilfe_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/drpdwn_hilfe_unclicked.png')
-        dropdown_hilfe_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/drpdwn_hilfe_clicked.png')
-        dropdown_navigation_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/drpdwn_navigation_unclicked.png')
-        dropdown_navigation_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/drpdwn_navigation_clicked.png')
-        dropdown_tools_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/drpdwn_tools_unclicked.png')
-        dropdown_tools_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/drpdwn_tools_clicked.png')
+        dropdown_datei_unclicked_array = MatrixUtils.get_numpy_array_of_image('drpdwn_datei_unclicked.png')
+        dropdown_datei_clicked_array = MatrixUtils.get_numpy_array_of_image('drpdwn_datei_clicked.png')
+        dropdown_anzeigen_unclicked_array = MatrixUtils.get_numpy_array_of_image('drpdwn_anzeigen_unclicked.png')
+        dropdown_anzeigen_clicked_array = MatrixUtils.get_numpy_array_of_image('drpdwn_anzeigen.png')
+        dropdown_hilfe_unclicked_array = MatrixUtils.get_numpy_array_of_image('drpdwn_hilfe_unclicked.png')
+        dropdown_hilfe_clicked_array = MatrixUtils.get_numpy_array_of_image('drpdwn_hilfe_clicked.png')
+        dropdown_navigation_unclicked_array = MatrixUtils.get_numpy_array_of_image('drpdwn_navigation_unclicked.png')
+        dropdown_navigation_clicked_array = MatrixUtils.get_numpy_array_of_image('drpdwn_navigation_clicked.png')
+        dropdown_tools_unclicked_array = MatrixUtils.get_numpy_array_of_image('drpdwn_tools_unclicked.png')
+        dropdown_tools_clicked_array = MatrixUtils.get_numpy_array_of_image('drpdwn_tools_clicked.png')
 
         small_button_arrays = []
-        small_button_1_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_1_unclicked.png')
-        small_button_arrays.append(small_button_1_unclicked_array)
-        small_button_1_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_1_clicked.png')
-        small_button_arrays.append(small_button_1_clicked_array)
-        small_button_2_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_2_unclicked.png')
-        small_button_arrays.append(small_button_2_unclicked_array)
-        small_button_2_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_2_clicked.png')
-        small_button_arrays.append(small_button_2_clicked_array)
-        small_button_3_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_3_unclicked.png')
-        small_button_arrays.append(small_button_3_unclicked_array)
-        small_button_3_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_3_clicked.png')
-        small_button_arrays.append(small_button_3_clicked_array)
-        small_button_4_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_4_unclicked.png')
-        small_button_arrays.append(small_button_4_unclicked_array)
-        small_button_4_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_4_clicked.png')
-        small_button_arrays.append(small_button_4_clicked_array)
-        small_button_5_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_5_unclicked.png')
-        small_button_arrays.append(small_button_5_unclicked_array)
-        small_button_5_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_5_clicked.png')
-        small_button_arrays.append(small_button_5_clicked_array)
-        small_button_6_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_6_unclicked.png')
-        small_button_arrays.append(small_button_6_unclicked_array)
-        small_button_6_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_6_clicked.png')
-        small_button_arrays.append(small_button_6_clicked_array)
-        small_button_7_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_7_unclicked.png')
-        small_button_arrays.append(small_button_7_unclicked_array)
-        small_button_7_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_7_clicked.png')
-        small_button_arrays.append(small_button_7_clicked_array)
-        small_button_8_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_8_unclicked.png')
-        small_button_arrays.append(small_button_8_unclicked_array)
-        small_button_8_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_8_clicked.png')
-        small_button_arrays.append(small_button_8_clicked_array)
-        small_button_9_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_9_unclicked.png')
-        small_button_arrays.append(small_button_9_unclicked_array)
-        small_button_9_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_9_clicked.png')
-        small_button_arrays.append(small_button_9_clicked_array)
-        small_button_10_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_10_unclicked.png')
-        small_button_arrays.append(small_button_10_unclicked_array)
-        small_button_10_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_10_clicked.png')
-        small_button_arrays.append(small_button_10_clicked_array)
-        small_button_11_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_11_unclicked.png')
-        small_button_arrays.append(small_button_11_unclicked_array)
-        small_button_11_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_11_clicked.png')
-        small_button_arrays.append(small_button_11_clicked_array)
-        small_button_12_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_12_unclicked.png')
-        small_button_arrays.append(small_button_12_unclicked_array)
-        small_button_12_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_12_clicked.png')
-        small_button_arrays.append(small_button_12_clicked_array)
-        small_button_13_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_13_unclicked.png')
-        small_button_arrays.append(small_button_13_unclicked_array)
-        small_button_13_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/small_button_13_clicked.png')
-        small_button_arrays.append(small_button_13_clicked_array)
+        for i in range(1, 14):
+            small_button_arrays.append(MatrixUtils.get_numpy_array_of_image('small_button_' + str(i) + '_unclicked.png'))
+            small_button_arrays.append(MatrixUtils.get_numpy_array_of_image('small_button_' + str(i) + '_clicked.png'))
 
-        menu_button_uber_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/menu_über_unclicked.png')
+        menu_button_uber_unclicked_array = MatrixUtils.get_numpy_array_of_image('menu_über_unclicked.png')
 
-        menu_button_other_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/menu_button_1.png')
-        menu_button_other_clicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/menu_button_1_clicked.png')
+        menu_button_other_unclicked_array = MatrixUtils.get_numpy_array_of_image('menu_button_1.png')
+        menu_button_other_clicked_array = MatrixUtils.get_numpy_array_of_image('menu_button_1_clicked.png')
 
-        menu_button_preferences_unclicked_array = MatrixUtils.get_numpy_array_of_image(
-            'resources/drawables/menu_button_preferences_unclicked.png')
+        menu_button_preferences_unclicked_array = MatrixUtils.get_numpy_array_of_image('menu_button_preferences_unclicked.png')
 
         # --------------------------------------------------------------------------------------------------
 
@@ -486,7 +380,7 @@ class JadxEnv(gym.Env):
         self.__all_buttons.append(preferences_window_clipboard_button)
         preferences_window_children.append(preferences_window_clipboard_button)
 
-        close_preferences_button = Button(close_pref_array, np.array([335, 1]), reward=2,
+        close_preferences_button = Button(preferences_window_close_array, np.array([335, 1]), reward=2,
                                           on_click_listener=close_window)
         self.__all_buttons.append(close_preferences_button)
         preferences_window_children.append(close_preferences_button)

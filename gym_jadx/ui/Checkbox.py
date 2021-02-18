@@ -7,10 +7,10 @@ from gym_jadx.util.MatrixUtils import MatrixUtils
 
 
 class Checkbox(Button):
-    ARRAY_CLICKED = MatrixUtils.get_numpy_array_of_image('resources/drawables/chk_clicked.png')
-    ARRAY_UNCLICKED = MatrixUtils.get_numpy_array_of_image('resources/drawables/chk_unclicked.png')
-    ARRAY_CLICKED_DISABLED = MatrixUtils.get_numpy_array_of_image('resources/drawables/chk_clicked_dis.png')
-    ARRAY_UNCLICKED_DISABLED = MatrixUtils.get_numpy_array_of_image('resources/drawables/chk_unclicked_dis.png')
+    ARRAY_CLICKED = MatrixUtils.get_numpy_array_of_image('chk_clicked.png')
+    ARRAY_UNCLICKED = MatrixUtils.get_numpy_array_of_image('chk_unclicked.png')
+    ARRAY_CLICKED_DISABLED = MatrixUtils.get_numpy_array_of_image('chk_clicked_dis.png')
+    ARRAY_UNCLICKED_DISABLED = MatrixUtils.get_numpy_array_of_image('chk_unclicked_dis.png')
 
     def __init__(self,
                  relative_coordinates: ndarray,

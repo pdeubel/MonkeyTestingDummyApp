@@ -63,11 +63,11 @@ class TestMatrixUtils(TestCase):
         self.assertTrue(np.array_equal(image, result))
 
     def test_get_numpy_array_of_image_type(self):
-        image = MatrixUtils.get_numpy_array_of_image('../resources/drawables/window_über.png')
+        image = MatrixUtils.get_numpy_array_of_image('window_über.png')
         self.assertIsInstance(image, np.ndarray)
 
     def test_get_numpy_array_of_image_shape(self):
-        image = MatrixUtils.get_numpy_array_of_image('../resources/drawables/window_über.png')
+        image = MatrixUtils.get_numpy_array_of_image('window_über.png')
         self.assertEqual(image.shape, (95, 95, 3))
 
 
