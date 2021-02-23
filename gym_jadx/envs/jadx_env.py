@@ -55,6 +55,12 @@ class JadxEnv(gym.Env):
         cv2.waitKey(0)
 
     def get_progress(self) -> ndarray:
+        """
+        Returns a vector containing the value 1 for each clicked Button and the
+        value 0 for each unclicked Button.
+
+        :return: Numpy Array of Button states
+        """
         progress_vector = []
         for button in self.__all_buttons:
             if button.reward_given:
@@ -68,6 +74,8 @@ class JadxEnv(gym.Env):
         number_of_windows_to_be_removed = 0
 
         # Click on windows starting with the topmost window down to the window at the bottom
+        # Continue clicking only while the current window was not clicked AND
+        # the current window is not modal
         for i in range(-1, -len(self.__windows) - 1, -1):
             index = i + number_of_windows_to_be_removed
             reward, window_includes_point, clicked_child_component_matrix, clicked_child_component_coords = \
@@ -86,11 +94,12 @@ class JadxEnv(gym.Env):
                 if self.__windows[index].modal:
                     break
                 elif self.__windows[index].auto_close:
-                    # Save the removed window for future reference
+                    # Save the removed window for future reference and continue with the loop
                     removed_window = self.__remove_window()
                     self.__windows_to_be_removed.append(removed_window)
                     number_of_windows_to_be_removed += 1
 
+        # Redraw all windows by stacking them up from the bottom to the top, if needed
         if self.__should_re_stack:
             self.__frame_buffer = self.__stack_windows()
 
